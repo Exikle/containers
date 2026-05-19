@@ -86,7 +86,7 @@ jobs:
         id: bake
         with:
           push: true
-          files: ./docker-bake.hcl
+          files: ./apps/${{ matrix.app }}/docker-bake.hcl
           source: ./apps/${{ matrix.app }}
           targets: image-all
         env:
