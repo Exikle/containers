@@ -35,7 +35,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
-          token: ${{ secrets.FORGEJO_TOKEN }}
+          token: ${{ secrets.CI_TOKEN }}
 
       - name: Delete App Directory
         env:
@@ -57,7 +57,7 @@ jobs:
         env:
           APP: ${{ inputs.app }}
           REASON: ${{ inputs.reason }}
-          FORGEJO_TOKEN: ${{ secrets.FORGEJO_TOKEN }}
+          FORGEJO_TOKEN: ${{ secrets.CI_TOKEN }}
           API_BASE: ${{ github.server_url }}/api/v1/repos/${{ github.repository }}
         run: |-
           pr_number=$(curl --fail-with-body -sS -X POST \
