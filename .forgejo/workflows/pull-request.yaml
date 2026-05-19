@@ -70,7 +70,6 @@ jobs:
         with:
           load: false
           push: false
-          files: ./apps/${{ matrix.app }}/docker-bake.hcl
           source: ./apps/${{ matrix.app }}
           targets: image-all
         env:
@@ -83,7 +82,6 @@ jobs:
         with:
           load: true
           push: false
-          files: ./apps/${{ matrix.app }}/docker-bake.hcl
           source: ./apps/${{ matrix.app }}
           targets: image-local
         env:
