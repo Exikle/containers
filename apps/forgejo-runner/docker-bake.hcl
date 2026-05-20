@@ -14,7 +14,7 @@ variable "SOURCE" {
 }
 
 variable "REGISTRY" {
-  default = "ghcr.io/exikle"
+  default = "git.dcunha.io/exikle"
 }
 
 variable "GIT_SHA" {
