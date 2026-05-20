@@ -6,7 +6,7 @@ variable "APP" {
 
 variable "VERSION" {
   // renovate: datasource=npm depName=@agentmemory/agentmemory
-  default = "0.9.20"
+  default = "0.9.21"
 }
 
 variable "SOURCE" {
