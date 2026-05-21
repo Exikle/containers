@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM docker.io/library/node:22-slim
+FROM docker.io/library/node:24-slim
 ARG TARGETARCH
 ARG VERSION
 ARG III_VERSION=0.11.2
