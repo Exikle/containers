@@ -1,0 +1,25 @@
+---
+name: App Options
+description: Read VERSION from a docker-bake.hcl file
+
+inputs:
+  app:
+    description: App Name
+    required: true
+
+outputs:
+  version:
+    description: App version from bake file
+    value: ${{ steps.options.outputs.version }}
+
+runs:
+  using: composite
+  steps:
+    - name: Read app options
+      id: options
+      shell: bash
+      working-directory: ./apps/${{ inputs.app }}
+      run: |-
+        VERSION=$(docker buildx bake --list type=variables,format=json --progress=quiet \
+          | jq --raw-output '.[] | select(.name == "VERSION") | .value')
+        echo "version=${VERSION}" >> $FORGEJO_OUTPUT

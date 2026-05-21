@@ -33,7 +33,7 @@ jobs:
           fi
 
       - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: https://github.com/actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           token: ${{ secrets.CI_TOKEN }}
 
@@ -47,7 +47,7 @@ jobs:
           APP: ${{ inputs.app }}
         run: |
           git config user.name "lab-assistant"
-          git config user.email "1643792+Exikle@users.noreply.github.com"
+          git config user.email "Exikle@users.noreply.git.dcunha.io"
           git checkout -b "deprecate/${APP}"
           git add -A
           git commit -m "release(${APP})!: deprecate app image"
@@ -58,7 +58,7 @@ jobs:
           APP: ${{ inputs.app }}
           REASON: ${{ inputs.reason }}
           FORGEJO_TOKEN: ${{ secrets.CI_TOKEN }}
-          API_BASE: ${{ github.server_url }}/api/v1/repos/${{ github.repository }}
+          API_BASE: ${{ forgejo.api_url }}/repos/${{ forgejo.repository }}
         run: |-
           pr_number=$(curl --fail-with-body -sS -X POST \
             -H "Authorization: token ${FORGEJO_TOKEN}" \
@@ -68,7 +68,7 @@ jobs:
               --arg title "release(${APP})!: deprecate app image" \
               --arg body "**Reason**: ${REASON}" \
               --arg head "deprecate/${APP}" \
-              --arg base "${{ github.ref_name }}" \
+              --arg base "${{ forgejo.ref_name }}" \
               '{title: $title, body: $body, head: $head, base: $base}')" \
             | jq -r '.number')
 

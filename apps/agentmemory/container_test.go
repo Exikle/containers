@@ -9,7 +9,7 @@ import (
 
 func Test(t *testing.T) {
 	ctx := context.Background()
-	image := testhelpers.GetTestImage("ghcr.io/exikle/agentmemory:rolling")
+	image := testhelpers.GetTestImage("git.dcunha.io/exikle/agentmemory:rolling")
 	testhelpers.TestHTTPEndpoint(t, ctx, image, testhelpers.HTTPTestConfig{
 		Port: "3111",
 		Path: "/agentmemory/health",

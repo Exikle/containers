@@ -13,14 +13,6 @@ variable "SOURCE" {
   default = "https://github.com/eleboucher/forgesync"
 }
 
-variable "REGISTRY" {
-  default = "git.dcunha.io/exikle"
-}
-
-variable "GIT_SHA" {
-  default = "dev"
-}
-
 group "default" {
   targets = ["image-local"]
 }
@@ -45,9 +37,5 @@ target "image-all" {
   inherits = ["image"]
   platforms = [
     "linux/amd64"
-  ]
-  tags = [
-    "${REGISTRY}/${APP}:rolling",
-    "${REGISTRY}/${APP}:${VERSION}-${substr(GIT_SHA, 0, 7)}"
   ]
 }
