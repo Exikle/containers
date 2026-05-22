@@ -29,14 +29,25 @@ jobs:
           app: ${{ inputs.app }}
 
       - name: Generate metadata
-        uses: https://github.com/docker/metadata-action@030e881283bb7a6894de51c315a6bfe6a94e05cf # v6.0.0
         id: meta
-        with:
-          images: git.dcunha.io/exikle/${{ inputs.app }}
-          tags: |
-            type=raw,value=rolling,enable=${{ inputs.release }}
-            type=raw,value=${{ steps.app-options.outputs.version }},enable=${{ inputs.release }}
-            type=raw,value=sandbox,enable=${{ !inputs.release }}
+        env:
+          APP: ${{ inputs.app }}
+          VERSION: ${{ steps.app-options.outputs.version }}
+          RELEASE: ${{ inputs.release }}
+        run: |-
+          REGISTRY="git.dcunha.io/exikle"
+          if [ "$RELEASE" = "true" ]; then
+            BAKE=$(jq -nc \
+              --arg rolling "${REGISTRY}/${APP}:rolling" \
+              --arg version "${REGISTRY}/${APP}:${VERSION}" \
+              '{"target":{"docker-metadata-action":{"tags":[$rolling,$version]}}}')
+          else
+            BAKE=$(jq -nc \
+              --arg sandbox "${REGISTRY}/${APP}:sandbox" \
+              '{"target":{"docker-metadata-action":{"tags":[$sandbox]}}}')
+          fi
+          echo "$BAKE" > .docker-metadata.json
+          echo "bake-file=.docker-metadata.json" >> $FORGEJO_OUTPUT
 
       - name: Login to Forgejo Registry
         uses: https://github.com/docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121 # v4.1.0
@@ -56,7 +67,7 @@ jobs:
         with:
           files: |
             ./apps/${{ inputs.app }}/docker-bake.hcl
-            ${{ steps.meta.outputs.bake-file }}
+            .docker-metadata.json
           set: |
             *.cache-from=type=registry,ref=git.dcunha.io/exikle/build_cache:${{ inputs.app }}-amd64
             *.cache-to=${{ inputs.release && format('type=registry,ref=git.dcunha.io/exikle/build_cache:{0}-amd64,mode=max,compression=zstd,force-compression=true', inputs.app) || '' }}
