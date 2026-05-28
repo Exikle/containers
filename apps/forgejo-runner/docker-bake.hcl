@@ -6,7 +6,7 @@ variable "APP" {
 
 variable "VERSION" {
   // renovate: datasource=github-tags depName=eleboucher/runner
-  default = "12.10.1"
+  default = "12.10.2"
 }
 
 variable "SOURCE" {
